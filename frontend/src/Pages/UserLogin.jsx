@@ -5,30 +5,50 @@ import { useNavigate } from "react-router-dom";
 import {userLogin} from '../Redux/ActionCreators/userActions';
 
 import Backdrop from '../Components/UIElements/Backdrop';
+import BottomRightCard from '../Components/UIElements/BottomRightCard';
 import LoadingSpinner from '../Components/UIElements/LoadingSpinner';
 
 const UserLogin = () => {
 
+    const [userLoginMessage, setUserLoginMessage] = useState(null);
     const [formState, setFormState] = useState({email: '', password: ''});
 
     const {isLoggedInState, loginStateLoading} = useSelector(store => store.userState);
+
+    let userLoginMessageTimerID;
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const loginFormSubmitHandler = (event) => {
         event.preventDefault();
-        dispatch(userLogin(formState));
+        dispatch(userLogin(formState, userLoginMessageHandler));
+    }
+
+    const userLoginMessageHandler = (message) => {
+        setUserLoginMessage(message);
+        userLoginMessageTimerID = setTimeout(() => {
+            setUserLoginMessage(null);
+        }, 4000);
     }
 
     useEffect(() => {
         if(isLoggedInState) {
             navigate('/');
         }
+
+        return () => {
+            clearTimeout(userLoginMessageTimerID);
+        }
     }, [isLoggedInState, navigate]);
 
     return (
         <>
+        {userLoginMessage && 
+        <BottomRightCard>
+            <h3 style={{fontSize: '1.5rem', color: 'white', width: 'max-content'}}>{userLoginMessage}</h3>
+        </BottomRightCard>}
+
         {loginStateLoading && 
         <Backdrop>
             <LoadingSpinner></LoadingSpinner>
