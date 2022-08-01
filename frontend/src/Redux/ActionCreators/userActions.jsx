@@ -47,7 +47,6 @@ export const checkLogin = () => {
         dispatch({type: 'USER_LOGIN_LOADING'});
 
         try {
-            console.log(base_url, 'base_url');
             const checkLoginReq = await fetch(`${base_url}/user/check-login`, {
                 method: 'GET',
                 credentials: 'include'
