@@ -32,6 +32,11 @@ exports.createUser = async(req, res) => {
 
 exports.loginUser = async(req, res) => {
     const { email, password } = req.body;
+    const hash = await bcrypt.hash(password, 10);
+    const match = await bcrypt.compare(password, hash);
+
+    return res.status(200).send(match);
+
     const expiry = parseInt(process.env.JWT_EXPIRY);
     try {
         const user = await AdminUser.findOne({ email });
