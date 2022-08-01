@@ -33,9 +33,9 @@ exports.createUser = async(req, res) => {
 exports.loginUser = async(req, res) => {
     const { email, password } = req.body;
     try {
-        const user = await AdminUser.findOne({email});
+        // const user = await AdminUser.findOne({email});
         // const hash = await bcrypt.hash(password, 10);
-        console.log(user);
+        // console.log(user);
         // const match = await bcrypt.compare(password, user.password);
         return res.status(200).json({match: `matched ${match}`});
     } catch (err) {
