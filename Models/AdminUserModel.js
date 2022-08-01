@@ -29,6 +29,6 @@ adminUserSchema.methods.generateToken = function() {
     return token;
 }
 
-const adminUser = new mongoose.model("Admin", adminUserSchema);
+const adminUser = mongoose.model("Admin", adminUserSchema);
 
 module.exports = adminUser;
