@@ -36,7 +36,7 @@ exports.loginUser = async(req, res) => {
         const user = await AdminUser.findOne({email});
         // const hash = await bcrypt.hash(password, 10);
         // console.log(user);
-        // const match = await bcrypt.compare(password, user.password);
+        const match = await bcrypt.compare(password, user.password);
         return res.status(200).json({user});
     } catch (err) {
         res.status(500).send('error occured.');
