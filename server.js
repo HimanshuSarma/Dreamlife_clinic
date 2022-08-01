@@ -29,6 +29,15 @@ app.use(PatientRoutes);
 app.use(SearchRoutes);
 app.use(SaleRoutes);
 
+process.env.pwd = process.cwd();
+
+if (process.env.ENVIRONMENT === 'production') {
+    app.use(express.static(path.join(process.env.pwd, 'frontend', 'build')));
+    app.use('*', (req, res) => {
+        res.sendFile(path.join(process.env.pwd, 'frontend', 'build', 'index.html'));
+    })
+}
+
 try {
     ConnectDB()
         .then(() => {
