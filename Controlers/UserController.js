@@ -32,11 +32,16 @@ exports.createUser = async(req, res) => {
 
 exports.loginUser = async(req, res) => {
     const { email, password } = req.body;
-    const user = await AdminUser.findOne({email});
-    // const hash = await bcrypt.hash(password, 10);
-    console.log(user);
-    const match = await bcrypt.compare(password, user.password);
-    return res.status(200).json({match: `matched ${match}`});
+    try {
+        const user = await AdminUser.findOne({email});
+        // const hash = await bcrypt.hash(password, 10);
+        console.log(user);
+        const match = await bcrypt.compare(password, user.password);
+        return res.status(200).json({match: `matched ${match}`});
+    } catch (err) {
+        res.status(500).send('error occured.');
+    }
+    
 
     const expiry = parseInt(process.env.JWT_EXPIRY);
     try {
