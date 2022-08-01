@@ -1,5 +1,6 @@
 const AdminUser = require("../Models/AdminUserModel");
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 exports.createUser = async(req, res) => {
     const { username, email, password } = req.body;
@@ -13,10 +14,12 @@ exports.createUser = async(req, res) => {
             return res.status(402).send("AdminUser Already Exists. Please Login to continue")
         }
 
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         const newUser = await new AdminUser({
             username,
             email,
-            password
+            password: hashedPassword
         })
 
         await newUser.save();
@@ -32,15 +35,15 @@ exports.loginUser = async(req, res) => {
     const expiry = parseInt(process.env.JWT_EXPIRY);
     try {
         const user = await AdminUser.findOne({ email });
-        console.log(user);
         if (!user) {
             return res.status(400).json({ message: "Incorrect email" });
         }
-        const isMatch = await bcrypt.compare(user.password, password);
+        const isMatch = await bcrypt.compare(password, user.password);
+        console.log(isMatch, user);
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid password" });
         } else {
-            const token = await user.generateToken();
+            const token = await jwt.sign({_id: user._id}, process.env.JWT_SECRET_KEY)
             res.cookie("jwt", token, {
                 expires: new Date(Date.now() + expiry),
                 maxAge: expiry,
