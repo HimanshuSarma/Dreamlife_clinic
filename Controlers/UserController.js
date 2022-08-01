@@ -42,7 +42,7 @@ exports.loginUser = async(req, res) => {
         res.status(500).send('error occured.');
     }
     
-
+    return;
     const expiry = parseInt(process.env.JWT_EXPIRY);
     try {
         const user = await AdminUser.findOne({ email });
