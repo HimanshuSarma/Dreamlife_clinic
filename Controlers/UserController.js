@@ -32,6 +32,7 @@ exports.loginUser = async(req, res) => {
     const expiry = parseInt(process.env.JWT_EXPIRY);
     try {
         const user = await AdminUser.findOne({ email });
+        console.log(user);
         if (!user) {
             return res.status(400).json({ message: "Incorrect email" });
         }
