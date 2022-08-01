@@ -37,7 +37,9 @@ if (process.env.ENVIRONMENT === 'production') {
     //     res.sendFile(path.join(process.env.pwd, 'frontend', 'build', 'index.html'));
     // })
 
-    app.send('Hello')
+    app.use(async(req, res) => {
+        res.send('Hello');
+    })
 }
 
 try {
