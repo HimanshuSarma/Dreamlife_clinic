@@ -6,7 +6,8 @@ const port = process.env.PORT;
 const ConnectDB = require("./DB/connection");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const path = require('path');
 
 const AdminUser = require("./Routes/AdminUserRoutes");
 const MedicineRoutes = require("./Routes/MedicineRoutes");
@@ -32,14 +33,10 @@ app.use(SaleRoutes);
 process.env.pwd = process.cwd();
 
 if (process.env.ENVIRONMENT === 'production') {
-    // app.use(express.static(path.join(process.env.pwd, 'frontend', 'build')));
-    // app.use('*', (req, res) => {
-    //     res.sendFile(path.join(process.env.pwd, 'frontend', 'build', 'index.html'));
-    // })
-
-    app.use(async(req, res) => {
-        res.send('Hello');
-    })
+    app.use(express.static(path.join(process.env.pwd, 'frontend', 'build')));
+    app.use('*', (req, res) => {
+        res.sendFile(path.join(process.env.pwd, 'frontend', 'build', 'index.html'));
+    });
 }
 
 try {
