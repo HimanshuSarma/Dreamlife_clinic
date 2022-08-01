@@ -37,7 +37,7 @@ exports.loginUser = async(req, res) => {
         // const hash = await bcrypt.hash(password, 10);
         // console.log(user);
         // const match = await bcrypt.compare(password, user.password);
-        return res.status(200).json({match: `matched ${match}`});
+        return res.status(200).json({match: `matched`});
     } catch (err) {
         res.status(500).send('error occured.');
     }
