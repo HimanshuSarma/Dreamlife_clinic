@@ -168,27 +168,113 @@ export const salesFormReducer = (currentSalesFormState = [], action) => {
 
 
 export const salesOfGivenYearAndMonthReducer = (currentSalesOfGivenYearAndMonth = {
-        salesOfGivenYearAndMonth: [],
+        salesOfGivenYearAndMonth: null,
+        yearAndMonth: null,
         isSalesOfGivenYearAndMonthLoading: false
     }, action) => {
     
     if(action.type === 'FETCH_SALES_OF_GIVEN_YEAR_AND_MONTH_LOADING') {
         return {...currentSalesOfGivenYearAndMonth, isSalesOfGivenYearAndMonthLoading: true};
     } else if(action.type === 'FETCH_SALES_OF_GIVEN_YEAR_AND_MONTH_LOADED') {
-        return {salesOfGivenYearAndMonth: action.payload, isSalesOfGivenYearAndMonthLoading: false};
+        return {salesOfGivenYearAndMonth: action.payload.data, yearAndMonth: action.payload.yearAndMonth,
+            isSalesOfGivenYearAndMonthLoading: false};
     } else if(action.type === 'FETCH_SALES_OF_GIVEN_YEAR_AND_MONTH_LOAD_FAILED') {
         return {...currentSalesOfGivenYearAndMonth, isSalesOfGivenYearAndMonthLoading: false};
+    } else if(action.type === 'SALE_PRODUCT_STATE_TO_UPDATE') {
+        return {...currentSalesOfGivenYearAndMonth, salesOfGivenYearAndMonth: 
+        currentSalesOfGivenYearAndMonth.salesOfGivenYearAndMonth.map((currentSale, currentSaleIndex) => {
+            if(currentSaleIndex === action.payload.saleIndex) {
+                return {...currentSale, products: currentSale.products.map((currentProduct, currentProductIndex) => {
+                    if(currentProductIndex === action.payload.productIndex) {
+                        return {
+                            ...currentProduct, 
+                            isEditing: true, 
+                            editForm: {
+                                sellingPrice: currentProduct.sellingPrice,
+                                profit: currentProduct.profit,
+                                qty: currentProduct.qty
+                            }
+                        }
+                    } else return currentProduct;
+                })}
+            } else return currentSale;
+        })}
+    } else if(action.type === 'SALE_PRODUCT_STATE_TO_CANCEL_UPDATE') {
+        return {...currentSalesOfGivenYearAndMonth, 
+            salesOfGivenYearAndMonth: 
+            currentSalesOfGivenYearAndMonth.salesOfGivenYearAndMonth.map((currentSale, currentSaleIndex) => {
+                if(currentSaleIndex === action.payload.saleIndex) {
+                    return {...currentSale, products: currentSale.products.map((currentProduct, currentProductIndex) => {
+                        if(currentProductIndex === action.payload.productIndex) {
+                            return {...currentProduct, 
+                            isEditing: false,
+                            editForm: null};
+                        } else return currentProduct;
+                    })}
+                } else return currentSale;
+            })}
+    } else if(action.type === 'UPDATE_SALE_PRODUCT_EDIT_FORM') {
+        return {...currentSalesOfGivenYearAndMonth, 
+        salesOfGivenYearAndMonth: currentSalesOfGivenYearAndMonth.salesOfGivenYearAndMonth.map((currentSale, currentSaleIndex) => {
+            if(currentSaleIndex === action.payload.saleIndex) {
+                return {...currentSale, products: currentSale.products.map((currentProduct, currentProductIndex) => {
+                    if(currentProductIndex === action.payload.productIndex) {
+                        return {...currentProduct, editForm: {
+                            ...currentProduct.editForm,
+                            [action.payload.property]: action.payload.val
+                        }};
+                    } else return currentProduct;
+                })}
+            } else return currentSale;
+        })}
+    } else if(action.type === 'UPDATE_SALE_PRODUCT_PROFIT_SELLING_PRICE_EDIT_FORM') {
+        return {...currentSalesOfGivenYearAndMonth,
+        salesOfGivenYearAndMonth: currentSalesOfGivenYearAndMonth.salesOfGivenYearAndMonth.map((currentSale, currentSaleIndex) => {
+            if(currentSaleIndex === action.payload.saleIndex) {
+                return {...currentSale, products: currentSale.products.map((currentProduct, currentProductIndex) => {
+                    if(currentProductIndex === action.payload.productIndex) {
+                        return {...currentProduct, 
+                        editForm: {
+                            ...currentProduct.editForm,
+                            sellingPrice: action.payload.property === 'sellingPrice' ? action.payload.val : 
+                            (currentProduct.costPrice + action.payload.val),
+                            profit: action.payload.property === 'profit' ? action.payload.val : 
+                            (action.payload.val - currentProduct.costPrice)
+                        }}
+                    } else return currentProduct;
+                })}
+            } else return currentSale;
+        })}
+    } else if(action.type === 'POST_EDITED_SALE_PRODUCT_LOADING') {
+        return {...currentSalesOfGivenYearAndMonth, isSalesOfGivenYearAndMonthLoading: true};
+    } else if(action.type === 'POST_EDITED_SALE_PRODUCT_LOADED') {
+        return {...currentSalesOfGivenYearAndMonth, 
+        salesOfGivenYearAndMonth: currentSalesOfGivenYearAndMonth.salesOfGivenYearAndMonth.map(currentSale => {
+            if(currentSale._id === action.payload.saleID) {
+                return {...currentSale, 
+                products: currentSale.products.map(currentProduct => {
+                    if(currentProduct._id === action.payload.productID) {
+                        return {...action.payload.updatedProduct,
+                            isEditing: false,
+                            editForm: null
+                        }
+                    } else return currentProduct;
+                })};
+            } else return currentSale;
+        })}
     } else if(action.type === 'POST_SALE_LOADING') {
         return {...currentSalesOfGivenYearAndMonth, isSalesOfGivenYearAndMonthLoading: true};
     } else if(action.type === 'POST_SALE_LOADED') {
-        return {salesOfGivenYearAndMonth: [...currentSalesOfGivenYearAndMonth.salesOfGivenYearAndMonth, action.payload], 
+        return {...currentSalesOfGivenYearAndMonth, salesOfGivenYearAndMonth: 
+            [...currentSalesOfGivenYearAndMonth.salesOfGivenYearAndMonth, action.payload], 
             isSalesOfGivenYearAndMonthLoading: false};
     } else if(action.type === 'POST_SALE_LOAD_FAILED') {
         return {...currentSalesOfGivenYearAndMonth, isSalesOfGivenYearAndMonthLoading: false};
     } else if(action.type === 'DELETE_SALE_LOADING') {
         return {...currentSalesOfGivenYearAndMonth, isSalesOfGivenYearAndMonthLoading: true};
     } else if(action.type === 'DELETE_SALE_LOADED') {
-        return {salesOfGivenYearAndMonth: currentSalesOfGivenYearAndMonth.salesOfGivenYearAndMonth.filter(currentSale => {
+        return {...currentSalesOfGivenYearAndMonth, 
+            salesOfGivenYearAndMonth: currentSalesOfGivenYearAndMonth.salesOfGivenYearAndMonth.filter(currentSale => {
             return currentSale._id !== action.payload;
         }), isSalesOfGivenYearAndMonthLoading: false};
     } else if(action.type === 'DELETE_SALE_FAILED') {

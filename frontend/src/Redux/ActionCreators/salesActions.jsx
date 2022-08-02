@@ -16,7 +16,7 @@ export const postSale = (payload, salesMessageHandler, date) => {
         dispatch({type: 'POST_SALE_LOADING'});
         
         try {
-            const postSaleReq = await fetch(`${base_url}/sale/create`, {
+            const postSaleReq = await fetch(`${base_url}/sales/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -48,6 +48,42 @@ export const postSale = (payload, salesMessageHandler, date) => {
     }
 } 
 
+export const postEditedSaleProduct = (payload) => {
+    return async(dispatch) => {
+        const {data} = payload;
+
+        if(data && typeof data.name === 'string' && data.name !== '' && typeof data.sellingPrice === 'number' && 
+        data.sellingPrice >= 0 && typeof data.profit === 'number' && data.profit >= 0 && typeof data.qty === 'number' &&
+        data.qty >= 0) {
+            dispatch({type: 'POST_EDITED_SALE_PRODUCT_LOADING'});
+
+            try {
+                const postEditedSaleProductReq = await fetch(`${base_url}/sales/products/${payload.saleID}/${payload.productID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(payload.data)
+                });
+
+                const postEditedSaleProductReqData = await postEditedSaleProductReq.json();
+
+                if(postEditedSaleProductReq.ok) {
+                    dispatch({
+                        type: 'POST_EDITED_SALE_PRODUCT_LOADED',
+                        payload: postEditedSaleProductReqData.payload
+                    });
+                } else {
+
+                }
+            } catch(err) {
+                console.log(err);
+            }
+        }
+    }   
+}
+
 export const fetchSalesOfGivenYearAndMonth = (payload) => {
     return async(dispatch) => {
         dispatch({type: 'FETCH_SALES_OF_GIVEN_YEAR_AND_MONTH_LOADING'});
@@ -64,7 +100,10 @@ export const fetchSalesOfGivenYearAndMonth = (payload) => {
             if(fetchSalesOfGivenYearAndMonthReq.ok) {
                 dispatch({
                     type: 'FETCH_SALES_OF_GIVEN_YEAR_AND_MONTH_LOADED',
-                    payload: fetchSalesOfGivenYearAndMonthReqData.payload
+                    payload: {
+                        data: fetchSalesOfGivenYearAndMonthReqData.payload,
+                        yearAndMonth: fetchSalesOfGivenYearAndMonthReqData.yearAndMonth
+                    }
                 })
             } else {
                 dispatch({type: 'FETCH_SALES_OF_GIVEN_YEAR_AND_MONTH_LOAD_FAILED'})

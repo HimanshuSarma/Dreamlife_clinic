@@ -285,7 +285,6 @@ a {
   font-weight: 500;
 }
 .layout-tableheader {
-  width: 100%;
   padding: 1.2rem 1.5rem;
   font-size: 2.2rem;
   font-weight: 500;
@@ -299,6 +298,7 @@ a {
   border-bottom: 1px solid rgba(221, 221, 221, 0.8666666667);
 }
 .layout-tabledata {
+  text-align: center;
   padding: 0.5rem 1rem;
   font-size: 2rem;
   font-weight: normal;
@@ -349,9 +349,8 @@ a {
 }
 
 .edit {
-  min-height: 100vh;
   width: 100%;
-  padding: 10rem;
+  padding: 1rem 3rem;
   display: flex;
   justify-content: center;
   align-items: center;

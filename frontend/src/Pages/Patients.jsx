@@ -8,6 +8,8 @@ import BottomRightCard from '../Components/UIElements/BottomRightCard';
 
 import {postPatient, deletePatient} from '../Redux/ActionCreators/patientActions';
 
+let patientsMessageTimerID;
+
 const Patients = () => {
 
   const patientFormState = useSelector(store => store.patientForm);
@@ -17,8 +19,6 @@ const Patients = () => {
   const [totalPatients, setTotalPatients] = useState(1);
   const [totalPatientsInputVal, setTotalPatientsInputVal] = useState(1);
   const [showPatientInputs, setShowPatientInputs] = useState(patientFormState.length > 0 ? true : false);
-
-  let patientsMessageTimerID;
 
   const dispatch = useDispatch();
 

@@ -2,8 +2,9 @@ import React, {useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {AiFillEdit, AiFillDelete} from "react-icons/ai";
+import {GiCancel} from 'react-icons/gi';
 
-import {deleteSale} from '../Redux/ActionCreators/salesActions';
+import {deleteSale, postEditedSaleProduct} from '../Redux/ActionCreators/salesActions';
 
 const SalesTable = ({comp, setShowSales, salesMessageHandler}) => {
 
@@ -23,7 +24,7 @@ const SalesTable = ({comp, setShowSales, salesMessageHandler}) => {
             return (
                 <React.Fragment key={currentSaleIndex}>
                 <tr className='layout-tableheading'>
-                    <th className="layout-tableheader">Sl.No</th>
+                    <th style={{maxWidth: '10rem'}} className="layout-tableheader">Sl.No</th>
                     <th className="layout-tableheader">Product Name</th>
                     <th className="layout-tableheader">Selling Price</th>
                     <th className="layout-tableheader">Profit</th>
@@ -31,35 +32,138 @@ const SalesTable = ({comp, setShowSales, salesMessageHandler}) => {
                     <th className="layout-tableheader">Sold at</th>
                     <th className="layout-tableheader">Total Units</th>
                     {comp !== 'search-results' && 
-                    <th className="layout-tableheader">Edit</th>}
+                    <th className="layout-tableheader">Edit/Save</th>}
                     {comp !== 'search-results' && 
-                    <th className="layout-tableheader">Delete</th>}
+                    <th className="layout-tableheader">Delete Sale/Cancel edit</th>}
                 </tr>
 
                 {currentSaleObj.products.map((currentProductObj, currentProductIndex) => {
                     const discount = parseFloat(currentProductObj.discount.$numberDecimal);
                     return (
                         <tr key={currentProductIndex}>
-                        <td className="layout-tabledata">{currentProductIndex + 1}</td>
-                        <td className="layout-tabledata">{currentProductObj.name}</td>
-                        <td className="layout-tabledata">{currentProductObj.sellingPrice}</td>
-                        <td className="layout-tabledata">{currentProductObj.profit}</td>
-                        <td className="layout-tabledata">{discount.toFixed(2)}</td>
-                        <td className="layout-tabledata">{currentProductIndex === 0 ? `${currentSaleObj.createdAt.date}/${
-                            currentSaleObj.createdAt.month}/${currentSaleObj.createdAt.year}` : '-'}</td>
-                        <td className="layout-tabledata">{currentProductObj.qty}</td>
-                        <td className="layout-tabledata">
-                        {comp !== 'search-results' && 
-                        <Link style={{cursor: 'pointer'}} to={'/edit/sales'}>
-                            <AiFillEdit />
-                        </Link>}
-                        </td>
-                        {comp !== 'search-results' && 
-                        <td style={{cursor: 'pointer'}} className="layout-tabledata">
-                            <AiFillDelete onClick={()=> {
-                                dispatch(deleteSale(currentSaleObj._id, salesMessageHandler));
-                            }} />
-                        </td>}
+                            <td style={{maxWidth: '10rem'}} className="layout-tabledata">{currentProductIndex + 1}</td>
+                            {!currentProductObj.isEditing && 
+                            <td className="layout-tabledata">{currentProductObj.name}</td>}
+                            {!currentProductObj.isEditing && 
+                            <td className="layout-tabledata">{currentProductObj.sellingPrice}</td>}
+                            {!currentProductObj.isEditing && 
+                            <td className="layout-tabledata">{currentProductObj.profit}</td>}
+                            {!currentProductObj.isEditing && <td className="layout-tabledata">{`${discount.toFixed(2)}%`}</td>}
+                            {!currentProductObj.isEditing && 
+                            <td className="layout-tabledata">{currentProductIndex === 0 ? `${currentSaleObj.createdAt.date}/${
+                                currentSaleObj.createdAt.month}/${currentSaleObj.createdAt.year}` : '-'}</td>}
+                            {!currentProductObj.isEditing && 
+                            <td className="layout-tabledata">{currentProductObj.qty}</td>}
+                            {comp !== 'search-results' && !currentProductObj.isEditing && 
+                            <td style={{cursor: 'pointer'}} className="layout-tabledata" onClick={() => {
+                                dispatch({
+                                    type: 'SALE_PRODUCT_STATE_TO_UPDATE',
+                                    payload: {
+                                        saleIndex: currentSaleIndex, 
+                                        productIndex: currentProductIndex
+                                    }
+                                })
+                            }}>
+                                <AiFillEdit  />
+                            </td>}
+                            {comp !== 'search-results' && !currentProductObj.isEditing &&
+                            <td style={{cursor: 'pointer'}} className="layout-tabledata">
+                                {currentProductIndex === 0 && 
+                                <AiFillDelete onClick={()=> {
+                                    dispatch(deleteSale(currentSaleObj._id, salesMessageHandler));
+                                }} />}
+                                {currentProductIndex !== 0 &&
+                                <p>{'-'}</p>}
+                            </td>}
+
+                            {currentProductObj.isEditing &&
+                            <td style={{padding: '0'}} className='layout-tabledata'>
+                                <span>{currentProductObj.name}</span>
+                            </td> }
+
+                            {currentProductObj.isEditing &&
+                            <td style={{padding: '0'}} className='layout-tabledata'>
+                                <input onChange={e => {
+                                    const parsedVal = parseInt(e.target.value);
+                                    const val = parsedVal >= 0 ? parsedVal : '';
+                                    dispatch({
+                                        type: 'UPDATE_SALE_PRODUCT_PROFIT_SELLING_PRICE_EDIT_FORM',
+                                        payload: {
+                                            val, property: 'sellingPrice',
+                                            saleIndex: currentSaleIndex, productIndex: currentProductIndex
+                                        }
+                                    })
+                                }} value={currentProductObj.editForm.sellingPrice} type="number" placeholder='S.P.'/>
+                            </td> }
+
+                            {currentProductObj.isEditing &&
+                            <td style={{padding: '0'}} className='layout-tabledata'>
+                                <input onChange={e => {
+                                    const parsedVal = parseInt(e.target.value);
+                                    const val = parsedVal >= 0 ? parsedVal : '';
+                                    dispatch({
+                                        type: 'UPDATE_SALE_PRODUCT_PROFIT_SELLING_PRICE_EDIT_FORM',
+                                        payload: {
+                                            val, property: 'profit',
+                                            saleIndex: currentSaleIndex, productIndex: currentProductIndex
+                                        }
+                                    })
+                                }} value={currentProductObj.editForm.profit} type="number" placeholder='profit'/>
+                            </td>}
+
+                            {currentProductObj.isEditing &&
+                            <td style={{padding: '0'}} className='layout-tabledata'>
+                                <span>{'-'}</span>
+                            </td>}
+
+                            {currentProductObj.isEditing &&
+                            <td style={{padding: '0'}} className='layout-tabledata'>
+                                <span>{'-'}</span>
+                            </td>}
+
+                            {currentProductObj.isEditing &&
+                            <td style={{padding: '0'}} className='layout-tabledata'>
+                                <input onChange={e => {
+                                    const parsedVal = parseInt(e.target.value);
+                                    const val = parsedVal ? parsedVal : '';
+                                    dispatch({
+                                        type: 'UPDATE_SALE_PRODUCT_EDIT_FORM',
+                                        payload: {
+                                            val, property: 'qty',
+                                            saleIndex: currentSaleIndex, productIndex: currentProductIndex
+                                        }
+                                    })
+                                }} value={currentProductObj.editForm.qty} type="number" placeholder='qty'/>
+                            </td>}
+
+                            {currentProductObj.isEditing && 
+                            <td style={{padding: '0'}} onClick={e => {
+                                dispatch(postEditedSaleProduct({
+                                    saleID: currentSaleObj._id,
+                                    productID: currentProductObj._id,
+                                    data: {
+                                        ...currentProductObj.editForm,
+                                        name: currentProductObj.name
+                                    }
+                                }))
+                            }} className='layout-tabledata'>
+                                {/* Save Svg */}
+                                <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0V0z"></path><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"></path>
+                                </svg>
+                            </td>}
+
+                            {currentProductObj.isEditing &&
+                            <td style={{padding: '0'}} onClick={e => {
+                                dispatch({
+                                    type: 'SALE_PRODUCT_STATE_TO_CANCEL_UPDATE',
+                                    payload: {
+                                        saleIndex: currentSaleIndex, 
+                                        productIndex: currentProductIndex
+                                    }
+                                })
+                            }} className='layout-tabledata'>
+                                <GiCancel />
+                            </td>}
                         </tr>
                     )
                 })}

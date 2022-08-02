@@ -8,7 +8,7 @@ import Backdrop from '../Components/UIElements/Backdrop';
 import BottomRightCard from '../Components/UIElements/BottomRightCard';
 import LoadingSpinner from '../Components/UIElements/LoadingSpinner';
 
-const UserLogin = () => {
+const UserLogin = ({appMessageHandler}) => {
 
     const [userLoginMessage, setUserLoginMessage] = useState(null);
     const [formState, setFormState] = useState({email: '', password: ''});
@@ -22,7 +22,7 @@ const UserLogin = () => {
 
     const loginFormSubmitHandler = (event) => {
         event.preventDefault();
-        dispatch(userLogin(formState, userLoginMessageHandler));
+        dispatch(userLogin(formState, appMessageHandler));
     }
 
     const userLoginMessageHandler = (message) => {

@@ -1,6 +1,6 @@
 import base_url from "../../setup/appSetup";
 
-export const userLogin = (payload, userLoginMessageHandler) => {
+export const userLogin = (payload, handler) => {
     return async(dispatch) => {
         dispatch({type: 'USER_LOGIN_LOADING'});
 
@@ -18,10 +18,10 @@ export const userLogin = (payload, userLoginMessageHandler) => {
 
             if(userLoginReq.ok) {
                 dispatch({type: 'USER_LOGGED_IN'});
-                userLoginMessageHandler(userLoginReqData.message);
+                handler(userLoginReqData.message);
             } else {
                 dispatch({type: 'USER_LOGIN_FAILED'});
-                userLoginMessageHandler(userLoginReqData.message);
+                handler(userLoginReqData.message);
             }
         } catch (err) {
             console.log(err);

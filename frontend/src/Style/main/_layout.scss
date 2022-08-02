@@ -173,7 +173,6 @@
         }
     }
     &-tableheader {
-        width: 100%;
         padding: 1.2rem 1.5rem;
         font-size: 2.2rem;
         font-weight: 500;
@@ -189,6 +188,7 @@
         }
     }
     &-tabledata {
+        text-align: center;
         padding: 0.5rem 1rem;
         font-size: 2rem;
         font-weight: normal;

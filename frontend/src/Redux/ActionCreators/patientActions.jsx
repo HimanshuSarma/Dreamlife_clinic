@@ -67,7 +67,7 @@ export const postPatient = (index, patientsMessageHandler) => {
     }
 }
 
-export const editPatient = (payload) => {
+export const editPatient = (payload, editPatientMessageHandler) => {
     return async(dispatch) => {
         const {editData} = payload;
         dispatch({type: 'EDIT_PATIENT_LOADING'});
@@ -80,7 +80,16 @@ export const editPatient = (payload) => {
                 },
                 credentials: 'include',
                 body: JSON.stringify(editData)
-            })
+            });
+
+            const editPatientReqData = await editPatientReq.json();
+
+            if(editPatientReq.ok) {
+                dispatch({type: 'EDIT_PATIENT_LOADED'});
+                editPatientMessageHandler(editPatientReqData.message);
+            } else {
+                editPatientMessageHandler(editPatientReqData.message);
+            }
         } catch(err) {
             console.log(err);
         }

@@ -11,9 +11,12 @@ import AddMedicine from './Pages/AddMedicine';
 import AddPatient from './Pages/AddPatient';
 import EditMedicine from './Pages/EditMedicine';
 import EditPatient from './Pages/EditPatient';
+import EditSale from './Pages/EditSale';
 import UserLogin from './Pages/UserLogin';
 import SearchComponent from './Components/SearchComponent';
 import SearchResults from './Components/SearchResults';
+import BottomRightCard from './Components/UIElements/BottomRightCard';
+import BottomRightCardMessage from './Components/UIElements/BottomRightCardMessage';
 
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
@@ -21,13 +24,47 @@ import { useDispatch } from 'react-redux';
 import {checkLogin} from './Redux/ActionCreators/userActions';
 
 const App = () => {
+
+  const [appMessage, setAppMessage] = useState({
+    message: null,
+    messageClearTimerID: '',
+  });
+
   const dispatch = useDispatch();
 
+  const appMessageHandler = (message) => {
+    setAppMessage(currentMessage => {
+      return {...currentMessage, message};
+    });
+
+    const timerID = setTimeout(() => {
+      setAppMessage(currentMessage => {
+        return {...currentMessage, message: null};
+      })
+    }, 4000);
+
+    setAppMessage(currentMessage => {
+      return {...currentMessage, messageClearTimerID: timerID};
+    });
+  }
+
   useEffect(() => {
-    dispatch(checkLogin());
+    dispatch(checkLogin());    
   }, [dispatch]);
 
+  useEffect(() => {
+    return () => {
+      clearTimeout(appMessage.messageClearTimerID);
+    }
+  }, []);
+
   return (
+    <>
+    {appMessage.message && 
+    <BottomRightCard>
+      <BottomRightCardMessage message={appMessage.message} />
+    </BottomRightCard>}
+
     <div>
       <Navbar /> 
       <SearchComponent />
@@ -42,9 +79,11 @@ const App = () => {
         <Route path="/addpatient" element={<AddPatient />} />
         <Route path='/edit/medicine/:_id' element={<EditMedicine />} />
         <Route path='/edit/patient/:_id' element={<EditPatient />} />
-        <Route path='/login' element={<UserLogin />} />
+        <Route path='/edit/sales/:indices' element={<EditSale />} />
+        <Route path='/login' element={<UserLogin appMessageHandler={appMessageHandler} />} />
       </Routes>
     </div>
+    </>
   )
 }
 

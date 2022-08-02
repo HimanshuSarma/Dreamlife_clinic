@@ -18,7 +18,7 @@ exports.createSale = async(req, res) => {
                     reqSale.products[i].qty > 0) {
                     const medicine = await Medicine.find({ 'name': reqSale.products[i].name });
 
-                    if (medicine.length !== 1) {
+                    if (medicine.length !== 1 && reqSale.products[i].costPrice !== medicine[0].costPrice) {
                         return res.status(400).json({ message: 'Invalid inputs. Please fill the details correctly.' });
                     } else {
                         const discount = (100 - (reqSale.products[i].sellingPrice * 100) /
@@ -28,7 +28,7 @@ exports.createSale = async(req, res) => {
                             medicine[0].costPrice) {
                             postSale.products.push({
                                 name: reqSale.products[i].name,
-                                costPrice: reqSale.products[i].costPrice,
+                                costPrice: medicine[0].costPrice,
                                 sellingPrice: reqSale.products[i].sellingPrice,
                                 discount,
                                 profit: reqSale.products[i].profit,
@@ -74,6 +74,77 @@ exports.createSale = async(req, res) => {
 }
 
 
+exports.updateProductInSale = async(req, res) => {
+
+    const {saleID, productID} = req.params;
+    const {name, sellingPrice, profit, qty} = req.body;
+    let sale;
+    let medicine;
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        if(sellingPrice && typeof sellingPrice === 'number' && sellingPrice >= 0 &&
+        typeof profit === 'number' && profit >= 0 && qty && typeof qty === 'number' && qty >= 0) {
+            sale = await SaleSchema.findById(saleID);
+            medicine = await Medicine.find({name});
+
+            if(sale && medicine[0]) {
+                for(let i = 0; i < sale.products.length; i++) {
+                    if(sale.products[i]._id.equals(productID)) {
+                        if(profit === sellingPrice - medicine[0].costPrice) {
+                            medicine[0].stock += sale.products[i].qty;
+                            medicine[0].stock -= qty;
+
+                            sale.products[i].sellingPrice = sellingPrice;
+                            sale.products[i].profit = profit;
+                            sale.products[i].qty = qty;
+                            sale.products[i].discount = (100 - (sellingPrice * 100) /
+                            medicine[0].MRP);
+
+                            const updatedSale = await sale.save({session});
+                            const updatedMedicine = await medicine[0].save({session});
+
+                            await session.commitTransaction();
+                            session.endSession();
+
+                            return res.status(200).json({payload: {
+                                updatedProduct: updatedSale.products.filter(currentProduct => {
+                                    return currentProduct._id.equals(productID);
+                                })[0], 
+                                updatedMedicine, 
+                                saleID, productID,
+                                message: 'Sale was updated successfully.'
+                            }});
+
+                        } else {
+                            await session.abortTransaction();
+                            session.endSession();
+                            return res.status(400).json({message: 'The profit and selling price are incorrect.'});
+                        }
+                    } else if((i === sale.products.length - 1) && !sale.products[i]._id.equals(productID)) {
+                        session.endSession();
+                        return res.status(404).json({message: 'The product to be updated was not found. Please try again.'});
+                    }
+                }
+            } else {
+                return res.status(404).json({message: 'Sale or medicine was not found. Please try again.'});
+            }
+        } else {
+            await session.abortTransaction();
+            session.endSession();
+            return res.status(400).json({message: 'Please fill out all the fields correctly.'});
+        }
+        
+    } catch(err) {
+        await session.abortTransaction();
+        session.endSession();
+        return res.status(500).json({ message: 'Something went wrong. Please try again.' });
+    }
+}
+
+
 exports.getSalesForReqdYear = async(req, res) => {
     try {
         if (req.params.year >= 2021) {
@@ -89,7 +160,7 @@ exports.getSalesForReqdYearAndMonth = async(req, res) => {
     try {
         const { year, month } = req.params;
         const sales = await SaleSchema.find({ 'createdAt.year': year, 'createdAt.month': month });
-        res.status(200).json({ payload: sales });
+        res.status(200).json({ payload: sales, yearAndMonth: {year: parseInt(year), month: parseInt(month)} });
     } catch (err) {
         res.status(500).json({ message: 'Something went wrong. Please try again.' });
     }

@@ -10,6 +10,8 @@ import MedicineTable from '../Components/MedicineTable';
 
 import {postMedicine} from '../Redux/ActionCreators/medicineActions';
 
+let medicineMessageTimerID;
+
 const Medicine = () => {
   const medicineFormState = useSelector(store => store.medicineForm);
   const {fetchedMedicines} = useSelector(store => store.fetchedMedicinesData);
@@ -19,8 +21,6 @@ const Medicine = () => {
   const [showMedicineInputs, setShowMedicineInputs] = useState(medicineFormState.length > 0 ? true : false);
   const [totalMedicinesInputVal, setTotalMedicinesInputVal] = useState(1);
   const [totalMedicines, setTotalMedicines] = useState(1);
-
-  let medicineMessageTimerID;
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -95,7 +95,7 @@ const Medicine = () => {
                   <th className="layout-tableheader">Category</th>
                   <th className="layout-tableheader">MRP</th>
                   <th className="layout-tableheader">Cost Price</th>
-                  <th className="layout-tableheader">Discount</th>
+                  <th className="layout-tableheader">Default discount</th>
                   <th className="layout-tableheader">Exp. Date</th>
                   <th className="layout-tableheader">Stock</th>
                   <th className="layout-tableheader">Save</th>

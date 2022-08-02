@@ -11,6 +11,8 @@ import {getCurrentDate} from '../Components/getCurrentDate';
 import {fetchMedicineByNameInSales} from '../Redux/ActionCreators/medicineActions';
 import {postSale, fetchSalesOfGivenYearAndMonth} from '../Redux/ActionCreators/salesActions';
 
+let salesMessageTimerID;
+
 const Sales = () => {
 
   const salesFormState = useSelector(store => store.salesForm);
@@ -31,14 +33,14 @@ const Sales = () => {
   const [salesMessage, setSalesMessage] = useState(null);
   // const [date, setDate] = useState();
 
-  let salesMessageTimerID;
+  const {salesOfGivenYearAndMonth, yearAndMonth} = useSelector(store => store.salesOfGivenYearAndMonth);
 
-  const {salesOfGivenYearAndMonth} = useSelector(store => store.salesOfGivenYearAndMonth);
+  const fetchedSalesYear = yearAndMonth ? yearAndMonth.year : null;
+  const fetchSalesMonth = yearAndMonth ? yearAndMonth.month : null;
 
   const salesFormStateLength = salesFormState.length;
 
   const dispatch = useDispatch();
-  const location = useLocation();
 
   const salesMessageHandler = (message) => {
     setSalesMessage(message);
@@ -59,19 +61,20 @@ const Sales = () => {
 
   useEffect(() => {
     if(!salesFormStateLength) {
-        setShowSalesInputs(false);
+        setShowSalesInputs(false);  
     }
   }, [salesFormStateLength]);
 
   useEffect(() => {
     const year = parseInt(viewSalesYearMonth.year);
     const month = parseInt(viewSalesYearMonth.month);
-    if(year && year >= 2021 && month && (month >= 1 && month <= 12)) {
+    if(year && year >= 2021 && month && (month >= 1 && month <= 12) && 
+     (!salesOfGivenYearAndMonth || (year !== fetchedSalesYear || month !== fetchSalesMonth))) {
       dispatch(fetchSalesOfGivenYearAndMonth({
         year, month
       }));
     }
-  }, [viewSalesYearMonth, dispatch]);
+  }, [viewSalesYearMonth, salesOfGivenYearAndMonth, fetchedSalesYear, fetchSalesMonth, dispatch]);
 
   return (
     <>

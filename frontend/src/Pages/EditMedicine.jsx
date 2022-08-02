@@ -1,10 +1,13 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import BottomRightCard from '../Components/UIElements/BottomRightCard';
+import BottomRightCardMessage from '../Components/UIElements/BottomRightCardMessage';
 
 import {editMedicine} from '../Redux/ActionCreators/medicineActions';
+
+let editMedicineMessageTimerID;
 
 const EditMedicine = () => {
 
@@ -19,9 +22,10 @@ const EditMedicine = () => {
 
     const editMedicineMessageHandler = (message) => {
         setEditMedicineMessage(message);
-        setTimeout(() => {
+        editMedicineMessageTimerID = setTimeout(() => {
             setEditMedicineMessage(null);
-        }, 4000);
+        }, 3000);
+        console.log(editMedicineMessageTimerID);
     }
 
     const editFormSubmitHandler = (e) => {
@@ -32,11 +36,17 @@ const EditMedicine = () => {
         }, editMedicineMessageHandler));
     }
 
+    useEffect(() => {
+        return () => {
+            clearTimeout(editMedicineMessageTimerID);
+        }
+    }, []);
+
     return (
         <div className='edit'>
             {editMedicineMessage && 
             <BottomRightCard>
-                <h3 style={{fontSize: '1.5rem', color: 'white', width: 'max-content'}}>{editMedicineMessage}</h3>
+                <BottomRightCardMessage message={editMedicineMessage} />
             </BottomRightCard>}
             <h1 className="edit-heading">Edit medicine</h1>
             <form onSubmit={(e) => editFormSubmitHandler(e)} className="edit-form">
