@@ -539,6 +539,7 @@ a {
   }
   .login-input {
     width: 90%;
+    min-width: 0;
   }
   .login-form {
     padding: 2rem 1rem;
