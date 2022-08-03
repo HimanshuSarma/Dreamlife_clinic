@@ -276,3 +276,15 @@
         }
     }
 }
+
+@media (max-width: 550px) {
+    .layout {
+        &-control {
+            width: 90%;
+            margin: 0 auto;
+        }
+        &-searchbar {
+            width: 100%;
+        }
+    }
+}
