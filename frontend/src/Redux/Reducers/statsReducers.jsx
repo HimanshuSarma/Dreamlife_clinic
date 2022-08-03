@@ -15,7 +15,7 @@ export const salesOfReqdYearReducer = (currentSalesOfReqdYearState = {
 } 
 
 export const medicinesWithGivenStockReducer = (currentMedicinesWithGivenStocks = {
-        medicinesWithGivenStock: [],
+        medicinesWithGivenStock: null,
         isMedicinesWithGivenStockLoading: false
     }, action) => {
 
@@ -25,6 +25,11 @@ export const medicinesWithGivenStockReducer = (currentMedicinesWithGivenStocks =
         return {medicinesWithGivenStock: action.payload, isMedicinesWithGivenStockLoading: false};
     } else if(action.type === 'FETCH_MEDICINES_WITH_STOCKS_LOADING_FAILED') {
         return {...currentMedicinesWithGivenStocks, isMedicinesWithGivenStockLoading: false};
+    } else if(action.type === 'USER_LOGGED_IN' || action.type === 'USER_LOGGED_OUT') {
+        return {
+            medicinesWithGivenStock: null,
+            isMedicinesWithGivenStockLoading: false
+        };
     }
 
     return currentMedicinesWithGivenStocks;

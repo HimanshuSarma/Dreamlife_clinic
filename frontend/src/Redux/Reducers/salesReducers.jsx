@@ -279,6 +279,12 @@ export const salesOfGivenYearAndMonthReducer = (currentSalesOfGivenYearAndMonth 
         }), isSalesOfGivenYearAndMonthLoading: false};
     } else if(action.type === 'DELETE_SALE_FAILED') {
         return {...currentSalesOfGivenYearAndMonth, isSalesOfGivenYearAndMonthLoading: false};
+    } else if(action.type === 'USER_LOGGED_IN' || action.type === 'USER_LOGGED_OUT') {
+        return {
+            salesOfGivenYearAndMonth: null,
+            yearAndMonth: null,
+            isSalesOfGivenYearAndMonthLoading: false
+        };
     }
  
     return currentSalesOfGivenYearAndMonth;

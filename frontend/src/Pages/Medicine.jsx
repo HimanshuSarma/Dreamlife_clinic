@@ -26,7 +26,7 @@ const Medicine = () => {
   const location = useLocation();
 
   const medicineFormStateLength = medicineFormState.length;
-  const fetchedMedicinesLength = fetchedMedicines.length;
+  const fetchedMedicinesLength = fetchedMedicines ? fetchedMedicines.length : 0;
 
   const medicineMessageHandler = (message) => {
     setMedicineMessage(message);
@@ -182,4 +182,4 @@ const Medicine = () => {
   )
 }
 
-export default Medicine
+export default Medicine;

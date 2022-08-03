@@ -1,4 +1,5 @@
-export const fetchedMedicinesReducer = (currentFetchedMedicinesState = {fetchedMedicines: [],
+export const fetchedMedicinesReducer = (currentFetchedMedicinesState = {
+    fetchedMedicines: null,
     fetchedMedicinesLoading: false}, action) => {
     
     if(action.type === 'FETCH_MEDICINES_LOADING') {
@@ -15,7 +16,7 @@ export const fetchedMedicinesReducer = (currentFetchedMedicinesState = {fetchedM
         }), fetchedMedicinesLoading: false};
     } else if(action.type === 'USER_LOGGED_IN' || action.type === 'USER_LOGGED_OUT' || 
         action.type === 'DELETE_FETCHED_MEDICINES') {
-        return {fetchedMedicines: [], fetchedMedicinesLoading: false};
+        return {fetchedMedicines: null, fetchedMedicinesLoading: false};
     }   
 
     return currentFetchedMedicinesState;
