@@ -28,7 +28,7 @@ const MedicineTable = ({comp, setShowSearchResults, medicineMessageHandler, setS
             <table className='layout-table'>
             <thead>
             <tr className='layout-tableheading'>
-            <th className="layout-tableheader">Sl.No</th>
+            <th className="layout-tableheader">Sl. No</th>
             <th className="layout-tableheader">Name</th>
             <th className="layout-tableheader">Category</th>
             <th className="layout-tableheader">MRP</th>
@@ -46,26 +46,31 @@ const MedicineTable = ({comp, setShowSearchResults, medicineMessageHandler, setS
             {medicineArray && medicineArray.map((medicine, index) => {
                 return (
                     <tr key={index}>
-                        <td className="layout-tabledata">{index + 1}</td>
-                        <td className="layout-tabledata">{medicine.name}</td>
-                        <td className="layout-tabledata">{medicine.category}</td>    
-                        <td className="layout-tabledata">{medicine.MRP}</td>
-                        <td className="layout-tabledata">{medicine.costPrice}</td>
-                        <td className="layout-tabledata">{`${medicine.discount}%`}</td>
-                        <td className="layout-tabledata">
+                        <td data-label="Sl. No" className="layout-tabledata">{index + 1}</td>
+                        <td data-label="Name" className="layout-tabledata">{medicine.name}</td>
+                        <td data-label="Category" className="layout-tabledata">{medicine.category}</td>    
+                        <td data-label="MRP" className="layout-tabledata">{medicine.MRP}</td>
+                        <td data-label="Cost Price" className="layout-tabledata">{medicine.costPrice}</td>
+                        <td data-label="Discount" className="layout-tabledata">{`${medicine.discount}%`}</td>
+                        <td data-label="Exp. Date" className="layout-tabledata">
                             {`${medicine.expDate.date}/${medicine.expDate.month}/${medicine.expDate.year}`}
                         </td>
-                        <td className="layout-tabledata">{medicine.stock}</td>
-                        {comp !== 'search-results' && <td className="layout-tabledata"> 
+                        <td data-label="Stock" className="layout-tabledata">{medicine.stock}</td>
+                        {comp !== 'search-results' && 
+                        <td data-label="Edit" className="layout-tabledata"> 
+                        <div className='layout-icon-wrapper'>
                         <Link to={`/edit/medicine/${medicine._id}`}>
                             <AiFillEdit />
                         </Link>  
+                        </div>
                         </td>}
                         {comp !== 'search-results' && 
-                        <td style={{cursor: 'pointer'}} className="layout-tabledata">
-                            <AiFillDelete onClick={e => {
-                               dispatch(deleteMedicine(medicine._id, medicineMessageHandler));
-                            }} />
+                        <td data-label="Delete" style={{cursor: 'pointer'}} className="layout-tabledata">
+                            <div className='layout-icon-wrapper'>
+                                <AiFillDelete onClick={e => {
+                                dispatch(deleteMedicine(medicine._id, medicineMessageHandler));
+                                }} />
+                            </div>
                         </td>}
                     </tr>
                 )

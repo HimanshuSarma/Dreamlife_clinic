@@ -5,6 +5,7 @@ import {AiFillDelete} from "react-icons/ai";
 
 import PatientTable from '../Components/PatientTable';
 import BottomRightCard from '../Components/UIElements/BottomRightCard';
+import BottomRightCardMessage from '../Components/UIElements/BottomRightCardMessage';
 
 import {postPatient, deletePatient} from '../Redux/ActionCreators/patientActions';
 
@@ -51,7 +52,7 @@ const Patients = () => {
     <>
     {patientsMessage && 
     <BottomRightCard>
-      <h3 style={{fontSize: '1.5rem', color: 'white', width: 'max-content'}}>{patientsMessage}</h3>
+      <BottomRightCardMessage message={patientsMessage} />
     </BottomRightCard> }
     <div className='layout'>
       <div className="layout-wrapper">
@@ -92,7 +93,7 @@ const Patients = () => {
                   <th className="layout-tableheader">Name</th>
                   <th className="layout-tableheader">Category</th>
                   <th className="layout-tableheader">Complain</th>
-                  <th className="layout-tableheader">Vist. Date</th>
+                  <th className="layout-tableheader">Visit Date</th>
                   <th className="layout-tableheader">Phone</th>
                   <th className="layout-tableheader">Med. Prescribed</th>
                   <th className="layout-tableheader">Save</th>
@@ -102,54 +103,57 @@ const Patients = () => {
                 return (
                   <React.Fragment key={index}>
                     <tr key={index}>
-                      <td><input onChange={(e) => dispatch({
+                      <td data-label="Name" className='layout-tabledata'><input onChange={(e) => dispatch({
                           type: 'UPDATE_PATIENT',
                           payload: {
                             value: e.target.value, property: 'name', index
                           }})} 
                         value={patientInput.name} className='layout-input' type="text" placeholder="Name" /></td>
-                      <td><input onChange={(e) => dispatch({
+                      <td data-label="Category" className='layout-tabledata'><input onChange={(e) => dispatch({
                           type: 'UPDATE_PATIENT',
                           payload: {
                             value: e.target.value, property: 'category', index
                           }})}  
                         value={patientInput.category} className='layout-input' type="text" placeholder="Category" /></td>
-                      <td><input onChange={(e) => dispatch({
+                      <td data-label="Complain" className='layout-tabledata'><input onChange={(e) => dispatch({
                           type: 'UPDATE_PATIENT',
                           payload: {
                             value: e.target.value, property: 'complain', index
                           }})}  
                         value={patientInput.complain} className='layout-input' type="text" placeholder="Complain" /></td>
-                      <td><input onChange={(e) => dispatch({
+                      <td data-label="Visit Date" className='layout-tabledata'><input onChange={(e) => dispatch({
                           type: 'UPDATE_PATIENT',
                           payload: {
                             value: e.target.value, property: 'visitDate', index
                           }})}  
                         value={patientInput.visitDate} className='layout-input' type="date" /></td>
-                      <td><input onChange={(e) => dispatch({
+                      <td data-label="Phone" className='layout-tabledata'><input onChange={(e) => dispatch({
                           type: 'UPDATE_PATIENT',
                           payload: {
-                            value: parseInt(e.target.value) ? parseInt(e.target.value) : '', property: 'phone', index
+                            value: parseInt(e.target.value) >= 0 ? parseInt(e.target.value) : '', property: 'phone', index
                           }})} value={patientInput.phone} type="number" className='layout-input' placeholder='Phone (not reqd)'/></td>
-                      <td><input onChange={(e) => dispatch({
+                      <td data-label="Med. Prescribed" className='layout-tabledata'><input onChange={(e) => dispatch({
                           type: 'UPDATE_PATIENT',
                           payload: {
                             value: e.target.value, property: 'medPrescribed', index
                           }})}  
                         value={patientInput.medPrescribed} className='layout-input' type="text" placeholder="Med. Prescribed" /></td>
-                      <td>
+                      <td data-label="Save" className='layout-tabledata'>
                         <div onClick={() => {
                           dispatch(postPatient(index, patientsMessageHandler));
-                        }} style={{cursor: 'pointer'}} className='layout-save-icon-wrapper'>
+                        }} style={{cursor: 'pointer'}} className='layout-icon-wrapper'>
                           <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0V0z"></path><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"></path>
                           </svg>
                         </div>
                       </td>
-                      <td className='layout-tabledata'>
+                      <td data-label="Delete" className='layout-tabledata'>
                         <div onClick={() => {
-                            dispatch(deletePatient(index, patientsMessageHandler));
-                          }} style={{cursor: 'pointer'}}>
-                          <AiFillDelete />
+                            dispatch({
+                              type: 'DELETE_PATIENT',
+                              payload: index
+                            });
+                          }} className='layout-icon-wrapper' style={{cursor: 'pointer'}}>
+                            <AiFillDelete />
                         </div>
                       </td>
                     </tr>

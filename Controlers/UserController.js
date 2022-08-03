@@ -2,34 +2,6 @@ const AdminUser = require("../Models/AdminUserModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-exports.createUser = async(req, res) => {
-    const { username, email, password } = req.body;
-
-    try {
-        if (!username || !email || !password) {
-            return res.status(400).send("Please Fill All The Details")
-        }
-        const existingUser = await AdminUser.findOne({ email });
-        if (existingUser) {
-            return res.status(402).send("AdminUser Already Exists. Please Login to continue")
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const newUser = await new AdminUser({
-            username,
-            email,
-            password: hashedPassword
-        })
-
-        await newUser.save();
-        res.status(201).send(newUser)
-
-    } catch (error) {
-        res.status(500).send(error);
-    }
-}
-
 exports.loginUser = async(req, res) => {
     const { email, password } = req.body;
     const expiry = parseInt(process.env.JWT_EXPIRY);

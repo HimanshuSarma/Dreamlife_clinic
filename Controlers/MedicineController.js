@@ -66,7 +66,6 @@ exports.getMedicine = async(req, res) => {
 
 exports.getSingleMedicineByName = async(req, res) => {
     if (req.params.name.trim().toLowerCase() === '' || req.params.name.trim().toLowerCase() === '.') {
-        console.log(123);
         return res.status(200).json({ payload: [] });
     }
 

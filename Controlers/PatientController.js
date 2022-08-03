@@ -36,10 +36,10 @@ exports.createPatient = async(req, res) => {
             }
             
         } else {
-            return res.status(400).json({message: "please fill all the fields"});
+            return res.status(400).json({message: "Please fill all the fields"});
         }
     } catch (error) {
-        res.status(500).send(error)
+        return res.status(500).json({message: 'Something went wrong. Please try again.'});
     }
 }
 

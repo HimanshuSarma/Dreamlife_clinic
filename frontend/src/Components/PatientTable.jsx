@@ -29,11 +29,11 @@ const PatientTable = ({comp, setShowSearchResults, setShowPatients, patientsMess
         <table className='layout-table'>
         <thead>
         <tr className='layout-tableheading'>
-            <th className="layout-tableheader">Sl.No</th>
+            <th className="layout-tableheader">Sl. No</th>
             <th className="layout-tableheader">Name</th>
             <th className="layout-tableheader">Category</th>
             <th className="layout-tableheader">Complain</th>
-            <th className="layout-tableheader">Vist. Date</th>
+            <th className="layout-tableheader">Visit Date</th>
             <th className="layout-tableheader">Med. Prescribed</th>
             <th className="layout-tableheader">Phone</th>
             {comp !== 'search-results' && 
@@ -49,24 +49,28 @@ const PatientTable = ({comp, setShowSearchResults, setShowPatients, patientsMess
                 const month = patient.visitDate.month;
                 return (
                     <tr key={index}>
-                    <td className="layout-tabledata">{index + 1}</td>
-                    <td className="layout-tabledata">{patient.name}</td>
-                    <td className="layout-tabledata">{patient.category}</td>
-                    <td className="layout-tabledata">{patient.complain}</td>
-                    <td className="layout-tabledata">{`${date}/${month}/${year}`}</td>
-                    <td className="layout-tabledata">{patient.medPrescribed}</td>
-                    <td className="layout-tabledata">{`${patient.phone ? patient.phone : '-' }`}</td>
-                    <td className="layout-tabledata">
+                    <td data-label="Sl. No" className="layout-tabledata">{index + 1}</td>
+                    <td data-label="Name" className="layout-tabledata">{patient.name}</td>
+                    <td data-label="Category" className="layout-tabledata">{patient.category}</td>
+                    <td data-label="Complain" className="layout-tabledata">{patient.complain}</td>
+                    <td data-label="Visit Date" className="layout-tabledata">{`${date}/${month}/${year}`}</td>
+                    <td data-label="Med. Prescribed" className="layout-tabledata">{patient.medPrescribed}</td>
+                    <td data-label="Phone" className="layout-tabledata">{`${patient.phone ? patient.phone : '-' }`}</td>
+                    <td data-label="Edit" className="layout-tabledata">
                     {comp !== 'search-results' && 
+                    <div className='layout-icon-wrapper'>
                     <Link style={{cursor: 'pointer'}} to={`/edit/patient/${patient._id}`}>
                         <AiFillEdit />
-                    </Link>}
+                    </Link>
+                    </div>}
                     </td>
                     {comp !== 'search-results' && 
-                    <td style={{cursor: 'pointer'}} className="layout-tabledata">
-                        <AiFillDelete onClick={() => {
-                            dispatch(deletePatient(patient._id, patientsMessageHandler));
-                        }} />
+                    <td data-label="Delete" style={{cursor: 'pointer'}} className="layout-tabledata">
+                        <div className='layout-icon-wrapper'>
+                            <AiFillDelete onClick={() => {
+                                dispatch(deletePatient(patient._id, patientsMessageHandler));
+                            }} />
+                        </div>
                     </td>}
                     </tr>
                 )

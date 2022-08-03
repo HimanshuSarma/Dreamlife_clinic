@@ -105,62 +105,62 @@ const Medicine = () => {
                 return (
                   <React.Fragment key={index}>
                     <tr key={index}>
-                      <td><input onChange={(e) => dispatch({
+                      <td data-label="Name" className='layout-tabledata'><input onChange={(e) => dispatch({
                           type: 'UPDATE_MEDICINE',
                           payload: {
                             value: e.target.value, property: 'name', index
                           }})} 
                         value={medicineInput.name} className='layout-input' type="text" placeholder="Name" /></td>
-                      <td><input onChange={(e) => dispatch({
+                      <td data-label="Category" className='layout-tabledata'><input onChange={(e) => dispatch({
                           type: 'UPDATE_MEDICINE',
                           payload: {
                             value: e.target.value, property: 'category', index
                           }})}  
                         value={medicineInput.category} className='layout-input' type="text" placeholder="Category" /></td>
-                      <td><input onChange={(e) => dispatch({
+                      <td data-label="MRP" className='layout-tabledata'><input onChange={(e) => dispatch({
                           type: 'UPDATE_MEDICINE',
                           payload: {
-                            value: parseInt(e.target.value) ? parseInt(e.target.value) : '', property: 'MRP', index
+                            value: parseInt(e.target.value) >= 0 ? parseInt(e.target.value) : '', property: 'MRP', index
                           }})}  
                         value={medicineInput.MRP} className='layout-input' type="number" placeholder="MRP" /></td>
-                      <td><input onChange={(e) => dispatch({
+                      <td data-label="Cost Price" className='layout-tabledata'><input onChange={(e) => dispatch({
                           type: 'UPDATE_MEDICINE',
                           payload: {
-                            value: parseInt(e.target.value) ? parseInt(e.target.value) : '', property: 'costPrice', index
+                            value: parseInt(e.target.value) >= 0 ? parseInt(e.target.value) : '', property: 'costPrice', index
                           }})}  
                         value={medicineInput.costPrice} className='layout-input' type="number" placeholder="Cost Price" /></td>
-                      <td><input onChange={(e) => dispatch({
+                      <td data-label="Discount" className='layout-tabledata'><input onChange={(e) => dispatch({
                           type: 'UPDATE_MEDICINE',
                           payload: {
-                            value: parseInt(e.target.value) ? parseInt(e.target.value) : '', property: 'discount', index
+                            value: parseFloat(e.target.value) >= 0 ? parseFloat(e.target.value) : '', property: 'discount', index
                           }})}  
-                        value={medicineInput.visitDate} className='layout-input' type="number" placeholder="Discount" /></td>
-                      <td><input onChange={(e) => dispatch({
+                        value={medicineInput.discount} className='layout-input' type="number" placeholder="Discount" /></td>
+                      <td data-label="Exp. Date" className='layout-tabledata'><input onChange={(e) => dispatch({
                           type: 'UPDATE_MEDICINE',
                           payload: {
                             value: e.target.value, property: 'expDate', index
                           }})}  
-                        value={medicineInput.medPrescribed} className='layout-input' type="date" placeholder="Exp. Date" /></td>
-                      <td><input onChange={(e) => dispatch({
+                        value={medicineInput.expDate} className='layout-input' type="date" placeholder="Exp. Date" /></td>
+                      <td data-label="Stock" className='layout-tabledata'><input onChange={(e) => dispatch({
                           type: 'UPDATE_MEDICINE',
                           payload: {
-                            value: parseInt(e.target.value) ? parseInt(e.target.value) : '', property: 'stock', index
+                            value: parseInt(e.target.value) >= 0 ? parseInt(e.target.value) : '', property: 'stock', index
                           }})}  
-                        value={medicineInput.medPrescribed} className='layout-input' type="number" placeholder="Stock" /></td>
-                      <td>
+                        value={medicineInput.stock} className='layout-input' type="number" placeholder="Stock" /></td>
+                      <td data-label="Save" className='layout-tabledata'>
                         <div onClick={() => {
                             dispatch(postMedicine(index, medicineMessageHandler));
-                          }} style={{cursor: 'pointer'}} className='layout-save-icon-wrapper'>
+                          }} style={{cursor: 'pointer'}} className='layout-icon-wrapper'>
                           <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="30px" width="30px" xmlns="http://www.w3.org/2000/svg"><path fill="none" d="M0 0h24v24H0V0z"></path><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"></path>
                           </svg>
                         </div>
                       </td>
-                      <td className='layout-tabledata'>
+                      <td data-label="Delete" className='layout-tabledata'>
                         <div onClick={() => {
                           dispatch({
                             type: 'DELETE_MEDICINE', 
                             payload: index
-                          })}} style={{cursor: 'pointer'}}>
+                          })}} className='layout-icon-wrapper' style={{cursor: 'pointer'}}>
                           <AiFillDelete />
                         </div>
                       </td>

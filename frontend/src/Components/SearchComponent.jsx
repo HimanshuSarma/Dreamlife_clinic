@@ -40,38 +40,40 @@ const SearchComponent = () => {
                 Search for : 
             </button>
 
-            <select onChange={(event) => {
-                dispatch({
-                    type: 'UPDATE_SEARCH_MAIN_CATEGORY',
-                    payload: event.target.value
-                });
-            }} value={mainCategory ? mainCategory : 'patients'} className='layout-dropdown' name="" id="">
-                <option value="patients">Patients</option>
-                <option value="medicines">Medicines</option>
-            </select>
+            <div className='layout-search-select-wrapper'>
+                <select onChange={(event) => {
+                    dispatch({
+                        type: 'UPDATE_SEARCH_MAIN_CATEGORY',
+                        payload: event.target.value
+                    });
+                }} value={mainCategory ? mainCategory : 'patients'} className='layout-dropdown' name="" id="">
+                    <option value="patients">Patients</option>
+                    <option value="medicines">Medicines</option>
+                </select>
 
-            <select onChange={event => {
-                dispatch({
-                    type: 'UPDATE_SEARCH_SUB_CATEGORY',
-                    payload: event.target.value
-                });
-            }} name="" id="">
-                {mainCategory === 'medicines' && 
-                <>
-                <option value="name">Name</option>
-                <option value="category">Category</option>
-                <option value="price">Price</option>
-                <option value="stock">Stock</option>
-                </>}
+                <select onChange={event => {
+                    dispatch({
+                        type: 'UPDATE_SEARCH_SUB_CATEGORY',
+                        payload: event.target.value
+                    });
+                }} name="" id="">
+                    {mainCategory === 'medicines' && 
+                    <>
+                    <option value="name">Name</option>
+                    <option value="category">Category</option>
+                    <option value="price">Price</option>
+                    <option value="stock">Stock</option>
+                    </>}
 
-                {(mainCategory === 'patients')  && 
-                <>
-                <option value="name">Name</option>
-                <option value="category">Category</option>
-                <option value="complain">Complain</option> 
-                <option value="medPrescribed">Medicine Prescribed</option>
-                </>}
-            </select>
+                    {(mainCategory === 'patients')  && 
+                    <>
+                    <option value="name">Name</option>
+                    <option value="category">Category</option>
+                    <option value="complain">Complain</option> 
+                    <option value="medPrescribed">Medicine Prescribed</option>
+                    </>}
+                </select>
+            </div>
         </div>
     </div> 
   )

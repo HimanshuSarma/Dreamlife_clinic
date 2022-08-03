@@ -2,12 +2,14 @@ import base_url from "../../setup/appSetup";
 
 export const postSale = (payload, salesMessageHandler, date) => {
     return async(dispatch, getState) => {
-        if(typeof payload.phone === 'number' || payload.phone === '') {
+        if((typeof payload.custPhone === 'number' && payload.custPhone > 0) || payload.custPhone === '') {
             for(let i = 0; i < payload.products.length; i++) {
-                if(payload.products[i].name === '' || typeof payload.products[i].sellingPrice !== 'number' || 
-                payload.products[i].sellingPrice <= 0 || typeof payload.products[i].profit !== 'number' || 
-                payload.products[i].profit < 0 || typeof payload.products[i].qty !== 'number' || 
-                payload.products[i].qty <= 0) {
+                const {name, sellingPrice, profit, qty} = payload.products[i];
+                console.log(name, sellingPrice, profit, qty);
+                if(name === '' || !sellingPrice || typeof sellingPrice !== 'number' || 
+                sellingPrice <= 0 || !profit || typeof profit !== 'number' || 
+                profit < 0 || !qty || typeof qty !== 'number' || qty <= 0) {
+                    salesMessageHandler(`Please check out all the inputs ${name ? `of ${name}` : ''}`);
                     return;
                 }
             }

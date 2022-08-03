@@ -22,9 +22,9 @@ html ::-webkit-scrollbar-thumb {
 }
 
 .navbar {
-  height: 10rem;
   background: #4d62b8;
   width: 100%;
+  padding: 0.75rem 0;
 }
 .navbar-wrapper {
   width: 95%;
@@ -141,11 +141,11 @@ a {
 .layout-amount {
   padding: 0.5rem 1rem;
 }
-.layout-save-icon {
+.layout-icon {
   width: 20px;
   aspect-ratio: 1/1;
 }
-.layout-save-icon-wrapper {
+.layout-icon-wrapper {
   display: flex;
   justify-content: center;
 }
@@ -191,12 +191,15 @@ a {
 .layout-search {
   border: none;
   outline: none;
-  padding: 0 3rem;
+  padding: 0.85rem 3rem;
   background: #668cdf;
   color: white;
   text-transform: uppercase;
   font-size: 1.5rem;
   cursor: pointer;
+}
+.layout-search-select-wrapper {
+  display: flex;
 }
 .layout-search-wrapper {
   display: flex;
@@ -235,7 +238,7 @@ a {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.5rem;
 }
 .layout-container {
   position: relative;
@@ -245,6 +248,7 @@ a {
   border-collapse: collapse;
   width: 100%;
   text-align: center;
+  margin-bottom: 1.5rem;
 }
 .layout-table-wrapper {
   position: relative;
@@ -252,7 +256,6 @@ a {
 }
 .layout-tableheading {
   width: 100%;
-  background: #274a94;
   text-align: left;
 }
 .layout-sales-row {
@@ -290,6 +293,7 @@ a {
   font-weight: 500;
   color: white;
   text-align: center;
+  background-color: #274a94;
 }
 .layout-tableheader-name {
   max-width: 15rem;
@@ -304,6 +308,70 @@ a {
   font-weight: normal;
 }
 
+@media (max-width: 1000px) {
+  .layout-sale-product-table {
+    margin-bottom: 0;
+  }
+  .layout-sale-product-row {
+    margin-bottom: 0;
+  }
+  .layout-table-sales-wrapper {
+    border: 1px solid #274a94;
+    margin-bottom: 2rem;
+  }
+  .layout-tableheading {
+    display: none;
+  }
+  .layout-icon-wrapper svg, .layout-icon-wrapper a svg {
+    width: 40px !important;
+    height: 25px !important;
+  }
+  .layout-icon-wrapper {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .layout-main {
+    width: 100%;
+  }
+  .layout-container, .layout-table-wrapper {
+    width: 85%;
+  }
+  .layout-control {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  table th {
+    display: none;
+  }
+  table td {
+    display: flex;
+    position: relative;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 2500rem !important;
+  }
+  table td * {
+    width: 40% !important;
+    justify-self: flex-end !important;
+    text-align: right !important;
+  }
+  table td::before {
+    content: attr(data-label);
+    text-align: left;
+    width: 50%;
+    height: 100%;
+  }
+  table tr {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 100%;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(47, 46, 46, 0.3) !important;
+  }
+}
 .add {
   width: 100%;
   min-height: calc(100vh - 100px);
@@ -482,6 +550,11 @@ a {
   margin-bottom: 1rem;
 }
 
+@media (max-width: 1000px) {
+  .sales-fetch-wrapper {
+    flex-direction: column;
+  }
+}
 input:focus {
   outline: none;
 }

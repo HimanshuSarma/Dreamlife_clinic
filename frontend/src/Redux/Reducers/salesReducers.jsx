@@ -89,12 +89,14 @@ export const salesFormReducer = (currentSalesFormState = [], action) => {
                         if(action.payload.property === 'profit') {
                             return {...currentProductObj, 
                                 profit: action.payload.value,
-                                sellingPrice: currentProductObj.costPrice + action.payload.value,
+                                sellingPrice: typeof action.payload.value === "number" ? currentProductObj.costPrice ?
+                                    (currentProductObj.costPrice + action.payload.value) : '' : currentProductObj.costPrice,
                                 isFocused: true
                             }
                         } else if(action.payload.property === 'sellingPrice') {
                             return {...currentProductObj, 
-                                profit: action.payload.value - currentProductObj.costPrice,
+                                profit: typeof action.payload.value === "number" ? currentProductObj.costPrice ?
+                                (action.payload.value - currentProductObj.costPrice) : '' : 0,
                                 sellingPrice: action.payload.value,
                                 isFocused: true
                             }
@@ -145,7 +147,7 @@ export const salesFormReducer = (currentSalesFormState = [], action) => {
                             name: currentProductObj.searchedProducts[action.payload.searchedProductIndex].name,
                             MRP: currentProductObj.searchedProducts[action.payload.searchedProductIndex].MRP,
                             costPrice: currentProductObj.searchedProducts[action.payload.searchedProductIndex].costPrice,
-                            sellingPrice: currentProductObj.searchedProducts[action.payload.searchedProductIndex].defaultSellingPrice,
+                            sellingPrice: currentProductObj.searchedProducts[action.payload.searchedProductIndex].defaultSellingPrice, 
                             profit: (currentProductObj.searchedProducts[action.payload.searchedProductIndex].defaultSellingPrice - 
                                 currentProductObj.searchedProducts[action.payload.searchedProductIndex].costPrice),
                             qty: '',

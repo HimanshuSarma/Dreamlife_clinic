@@ -32,7 +32,8 @@ export const postPatient = (index, patientsMessageHandler) => {
         const patient = getState().patientForm[index];
 
         if(patient.name !== '' && patient.category !== '' && patient.complain !== '' && 
-            patient.visitDate !== ''  && patient.medPrescribed !== '') {
+            patient.visitDate !== ''  && patient.medPrescribed !== '' && 
+            typeof patient.phone === 'number' && patient.phone > 0) {
             
             dispatch({type: 'POST_PATIENT_LOADING'});
 
@@ -58,11 +59,11 @@ export const postPatient = (index, patientsMessageHandler) => {
                     patientsMessageHandler(postPatientReqData.message);
                 }
             } catch (err) {
-                console.log(err);
+                patientsMessageHandler('Something went wrong. Please try again.');
             }
             
         } else {
-            console.log('Please fill out the details correctly.');
+            patientsMessageHandler('Please fill out all the details correctly.');
         }
     }
 }

@@ -121,7 +121,7 @@ export const postMedicine = (index, medicineMessageHandler) => {
             }
             
         } else {
-            console.log('Please fill out the details correctly.');
+            medicineMessageHandler('Please fill out the details correctly.');
         }
     }
 }
