@@ -42,3 +42,19 @@
         cursor: pointer;
     }
 }
+
+@media (max-width: 550px) {
+    .login {
+        width: 90%;
+        margin: 0 auto;
+        &-wrapper {
+            padding: 5rem 0;
+        }
+        &-input {
+            width: 90%;
+        }
+        &-form {
+            padding: 2rem 1rem;
+        }
+    }
+}

@@ -518,6 +518,21 @@ a {
   cursor: pointer;
 }
 
+@media (max-width: 550px) {
+  .login {
+    width: 90%;
+    margin: 0 auto;
+  }
+  .login-wrapper {
+    padding: 5rem 0;
+  }
+  .login-input {
+    width: 90%;
+  }
+  .login-form {
+    padding: 2rem 1rem;
+  }
+}
 .stats-page-wrapper {
   display: flex;
   flex-direction: column;
