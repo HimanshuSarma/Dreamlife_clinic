@@ -283,8 +283,21 @@
             width: 90%;
             margin: 0 auto;
         }
+        &-search {
+            &-select-wrapper {
+                width: 100%;
+                & select {
+                    width: 50%;
+                }
+            }
+            &-wrapper {
+                width: 90%;
+                flex-direction: column;
+            }
+        }
         &-searchbar {
             width: 100%;
+            min-width: 0;
         }
     }
 }

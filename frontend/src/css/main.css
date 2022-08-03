@@ -377,8 +377,19 @@ a {
     width: 90%;
     margin: 0 auto;
   }
+  .layout-search-select-wrapper {
+    width: 100%;
+  }
+  .layout-search-select-wrapper select {
+    width: 50%;
+  }
+  .layout-search-wrapper {
+    width: 90%;
+    flex-direction: column;
+  }
   .layout-searchbar {
     width: 100%;
+    min-width: 0;
   }
 }
 .add {
