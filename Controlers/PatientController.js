@@ -39,7 +39,7 @@ exports.createPatient = async(req, res) => {
             return res.status(400).json({message: "Please fill all the fields"});
         }
     } catch (error) {
-        return res.status(500).json({message: 'Something went wrong. Please try again.'});
+        return res.status(500).json({message: `Something went wrong. Please try again.`});
     }
 }
 
@@ -48,7 +48,7 @@ exports.getPatient = async(req, res) => {
         const allPatients = await Patient.find();
         res.status(200).json({ payload: allPatients });
     } catch (error) {
-        res.status(500).json({ message: 'Some error occured. Please try again.' });
+        res.status(500).json({ message: `Some error occured. Please try again. ${error}` });
     }
 }
 
